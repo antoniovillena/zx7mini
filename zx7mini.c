@@ -129,10 +129,10 @@ int main(int argc, char *argv[]) {
     output_data = compress(optimize(input_data, input_size), input_data, input_size, &output_size);
 
     if( back )
-      for ( i= 0; i<output_size>>1; i++ )
+      for ( i= 0; i<output_index>>1; i++ )
         j= output_data[i],
-        output_data[i]= output_data[output_size-1-i],
-        output_data[output_size-1-i]= j;
+        output_data[i]= output_data[output_index-1-i],
+        output_data[output_index-1-i]= j;
 
     /* write output file */
     if (fwrite(output_data, sizeof(char), output_index, ofp) != output_index) {
