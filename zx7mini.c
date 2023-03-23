@@ -48,6 +48,7 @@ Optimal *optimize(unsigned char *input_data, size_t input_size);
 unsigned char *compress(Optimal *optimal, unsigned char *input_data, size_t input_size, size_t *output_size);
 
 int back;
+size_t output_index;
 
 int main(int argc, char *argv[]) {
     FILE *ifp;
@@ -128,13 +129,13 @@ int main(int argc, char *argv[]) {
     output_data = compress(optimize(input_data, input_size), input_data, input_size, &output_size);
 
     if( back )
-      for ( i= 0; i<output_size>>1; i++ )
+      for ( i= 0; i<output_index>>1; i++ )
         j= output_data[i],
-        output_data[i]= output_data[output_size-1-i],
-        output_data[output_size-1-i]= j;
+        output_data[i]= output_data[output_index-1-i],
+        output_data[output_index-1-i]= j;
 
     /* write output file */
-    if (fwrite(output_data, sizeof(char), output_size, ofp) != output_size) {
+    if (fwrite(output_data, sizeof(char), output_index, ofp) != output_index) {
          fprintf(stderr, "Error: Cannot write output file %s\n", argv[2]);
          exit(1);
     }
@@ -144,13 +145,12 @@ int main(int argc, char *argv[]) {
 
     /* done! */
     printf("Optimal LZ77/LZSS compression by Einar Saukas\nFile converted from %lu to %lu bytes!\n",
-        (unsigned long)input_size, (unsigned long)output_size);
+        (unsigned long)input_size, (unsigned long)output_index);
 
     return 0;
 }
 
 unsigned char* output_data;
-size_t output_index;
 size_t bit_index;
 int bit_mask;
 
